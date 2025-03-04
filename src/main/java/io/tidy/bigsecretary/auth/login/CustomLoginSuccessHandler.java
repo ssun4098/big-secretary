@@ -1,20 +1,41 @@
 package io.tidy.bigsecretary.auth.login;
 
-import jakarta.servlet.ServletException;
+import io.tidy.bigsecretary.auth.jwt.JwtProvider;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
-
 @Slf4j
+@RequiredArgsConstructor
 @Component
 public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler {
-    @Override
-    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-        log.info("LOGIN SUCCESS");
-    }
+
+  private final JwtProvider jwtProvider;
+  private final String COOKIE_NAME = "BS_UR_TO";
+
+  @Value("${login.expired}")
+  private Long expired;
+
+  @Override
+  public void onAuthenticationSuccess(
+      HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
+    CustomUserDetail customUserDetail = (CustomUserDetail) authentication.getPrincipal();
+    SecurityContextHolder.getContext().setAuthentication(authentication);
+    response.addCookie(createCookie(customUserDetail.getId()));
+  }
+
+  private Cookie createCookie(Long id) {
+    Cookie cookie = new Cookie(COOKIE_NAME, jwtProvider.createToken(String.valueOf(id), expired));
+    cookie.setSecure(true);
+    cookie.setHttpOnly(true);
+    cookie.setMaxAge(Math.toIntExact(expired));
+    return cookie;
+  }
 }
