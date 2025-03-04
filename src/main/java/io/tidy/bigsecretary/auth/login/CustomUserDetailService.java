@@ -19,4 +19,9 @@ public class CustomUserDetailService implements UserDetailsService {
     User user = userRepository.findByPhone(username).orElseThrow(() -> new RuntimeException());
     return new CustomUserDetail(user);
   }
+
+  public UserDetails loadUserById(Long id) {
+    User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException());
+    return new CustomUserDetail(user);
+  }
 }

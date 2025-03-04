@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component;
 public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler {
 
   private final JwtProvider jwtProvider;
-  private final String COOKIE_NAME = "BS_UR_TO";
+  public static final String LOGIN_SUCCESS_COOKIE = "BS_UR_TO";
 
   @Value("${login.expired}")
   private Long expired;
@@ -32,7 +32,7 @@ public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler {
   }
 
   private Cookie createCookie(Long id) {
-    Cookie cookie = new Cookie(COOKIE_NAME, jwtProvider.createToken(String.valueOf(id), expired));
+    Cookie cookie = new Cookie(LOGIN_SUCCESS_COOKIE, jwtProvider.createToken(String.valueOf(id), expired));
     cookie.setSecure(true);
     cookie.setHttpOnly(true);
     cookie.setMaxAge(Math.toIntExact(expired));
