@@ -1,10 +1,12 @@
-package io.tidy.bigsecretary.user.infra;
+package io.tidy.bigsecretary.user.domain;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.UUID;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
@@ -16,6 +18,9 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
     private Long id;
+
+    @Column(name = "uuid")
+    private String uuid;
 
     @Column(name = "name", length = 128)
     private String name;
@@ -31,5 +36,6 @@ public class User {
         this.name = name;
         this.phone = phone;
         this.password = password;
+        this.uuid = UUID.randomUUID().toString();
     }
 }

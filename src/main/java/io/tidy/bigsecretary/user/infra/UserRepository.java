@@ -1,5 +1,6 @@
 package io.tidy.bigsecretary.user.infra;
 
+import io.tidy.bigsecretary.user.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
