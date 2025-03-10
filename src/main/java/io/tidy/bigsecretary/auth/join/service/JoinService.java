@@ -1,8 +1,11 @@
 package io.tidy.bigsecretary.auth.join.service;
 
-import io.tidy.bigsecretary.user.infra.User;
+import io.tidy.bigsecretary.auth.join.exception.JoinErrorCode;
+import io.tidy.bigsecretary.common.exception.CommonException;
+import io.tidy.bigsecretary.user.domain.User;
 import io.tidy.bigsecretary.user.infra.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,7 +20,7 @@ public class JoinService {
   @Transactional
   public JoinReturn join(JoinParam joinParam) {
     if (userRepository.existsByPhone(joinParam.getPhone())) {
-      return null;
+      throw new CommonException(JoinErrorCode.DUPLICATE_PHONE);
     }
     User result = userRepository.save(
         User.builder()
