@@ -1,6 +1,8 @@
 package io.tidy.bigsecretary.auth.login;
 
-import io.tidy.bigsecretary.user.infra.User;
+import io.tidy.bigsecretary.common.exception.CommonException;
+import io.tidy.bigsecretary.user.domain.User;
+import io.tidy.bigsecretary.user.exception.UserErrorCode;
 import io.tidy.bigsecretary.user.infra.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,12 +18,7 @@ public class CustomUserDetailService implements UserDetailsService {
 
   @Override
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-    User user = userRepository.findByPhone(username).orElseThrow(() -> new RuntimeException());
-    return new CustomUserDetail(user);
-  }
-
-  public UserDetails loadUserById(Long id) {
-    User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException());
-    return new CustomUserDetail(user);
+    User user = userRepository.findByPhone(username).orElseThrow(() -> new CommonException(UserErrorCode.NOT_FOUND));
+    return CustomUserDetail.fromUserEntity(user);
   }
 }

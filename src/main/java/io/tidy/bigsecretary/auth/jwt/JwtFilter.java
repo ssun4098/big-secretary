@@ -1,7 +1,8 @@
 package io.tidy.bigsecretary.auth.jwt;
 
 import io.tidy.bigsecretary.auth.login.CustomLoginSuccessHandler;
-import io.tidy.bigsecretary.auth.login.CustomUserDetailService;
+import io.tidy.bigsecretary.auth.login.CustomUserDetail;
+import io.tidy.bigsecretary.user.domain.AuthenticatedUserContext;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
@@ -23,7 +24,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 public class JwtFilter extends OncePerRequestFilter {
 
   private final JwtProvider jwtProvider;
-  private final CustomUserDetailService userDetailService;
+  private final AuthenticatedUserContext authenticatedUserContext;
 
   @Override
   protected void doFilterInternal(
@@ -33,18 +34,19 @@ public class JwtFilter extends OncePerRequestFilter {
     if (Objects.nonNull(cookie)) {
       String id = jwtProvider.getUuidByToken(cookie.getValue());
       if (Objects.nonNull(id)) {
-        UserDetails customUserDetail = userDetailService.loadUserById(Long.parseLong(id));
+        UserDetails customUserDetail =
+            CustomUserDetail.fromUserEntity(authenticatedUserContext.findById(Long.parseLong(id)));
         SecurityContextHolder.getContext()
-                .setAuthentication(
-                        new UsernamePasswordAuthenticationToken(
-                                customUserDetail, null, customUserDetail.getAuthorities()));
+            .setAuthentication(
+                new UsernamePasswordAuthenticationToken(
+                    customUserDetail, null, customUserDetail.getAuthorities()));
       }
     }
     filterChain.doFilter(request, response);
   }
 
   private Cookie findCookie(Cookie[] cookies) {
-    if(Objects.isNull(cookies)) {
+    if (Objects.isNull(cookies)) {
       return null;
     }
     for (Cookie cookie : cookies) {

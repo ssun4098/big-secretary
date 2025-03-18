@@ -1,29 +1,29 @@
-package io.tidy.bigsecretary.auth.join.exception;
+package io.tidy.bigsecretary.briefcase.exception;
 
 import io.tidy.bigsecretary.common.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 
 @RequiredArgsConstructor
-public enum JoinErrorCode implements ErrorCode {
-    DUPLICATE_PHONE("J-400-1", "이미 가입된 번호 입니다.", HttpStatus.BAD_REQUEST);
-
+public enum BriefcaseErrorCode implements ErrorCode {
+    NOT_FOUND("B-404-1", "존재하지 않는 캘린더 입니다.", HttpStatus.NOT_FOUND),
+    FORBIDDEN("B-403-1", "해당 캘린더에 대한 권한이 없습니다.", HttpStatus.FORBIDDEN);
     private final String code;
     private final String message;
     private final HttpStatus status;
 
     @Override
     public String getCode() {
-        return this.code;
+        return "";
     }
 
     @Override
     public String getMessage() {
-        return this.message;
+        return "";
     }
 
     @Override
     public HttpStatus getStatus() {
-        return this.status;
+        return null;
     }
 }

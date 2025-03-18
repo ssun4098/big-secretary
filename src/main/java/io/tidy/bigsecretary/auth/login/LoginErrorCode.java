@@ -1,12 +1,12 @@
-package io.tidy.bigsecretary.auth.join.exception;
+package io.tidy.bigsecretary.auth.login;
 
 import io.tidy.bigsecretary.common.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 
 @RequiredArgsConstructor
-public enum JoinErrorCode implements ErrorCode {
-    DUPLICATE_PHONE("J-400-1", "이미 가입된 번호 입니다.", HttpStatus.BAD_REQUEST);
+public enum LoginErrorCode implements ErrorCode {
+    REQUIRED_LOGIN("L-401-1", "로그인이 필요한 서비스입니다.", HttpStatus.UNAUTHORIZED);
 
     private final String code;
     private final String message;
@@ -14,16 +14,16 @@ public enum JoinErrorCode implements ErrorCode {
 
     @Override
     public String getCode() {
-        return this.code;
+        return "";
     }
 
     @Override
     public String getMessage() {
-        return this.message;
+        return "";
     }
 
     @Override
     public HttpStatus getStatus() {
-        return this.status;
+        return null;
     }
 }

@@ -1,13 +1,12 @@
-package io.tidy.bigsecretary.auth.join.exception;
+package io.tidy.bigsecretary.user.exception;
 
 import io.tidy.bigsecretary.common.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 
 @RequiredArgsConstructor
-public enum JoinErrorCode implements ErrorCode {
-    DUPLICATE_PHONE("J-400-1", "이미 가입된 번호 입니다.", HttpStatus.BAD_REQUEST);
-
+public enum UserErrorCode implements ErrorCode {
+    NOT_FOUND("U-404-1", "존재하지 않는 회원입니다.", HttpStatus.NOT_FOUND);
     private final String code;
     private final String message;
     private final HttpStatus status;

@@ -12,7 +12,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -39,7 +38,6 @@ public class SecurityConfig {
             .authorizeHttpRequests(
             (request) -> {
               request.requestMatchers("/api/login").permitAll();
-              request.requestMatchers("/api/test").authenticated();
             })
         .csrf(AbstractHttpConfigurer::disable)
         .formLogin(AbstractHttpConfigurer::disable)
@@ -75,10 +73,5 @@ public class SecurityConfig {
   public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration)
       throws Exception {
     return configuration.getAuthenticationManager();
-  }
-
-  @Bean
-  public WebSecurityCustomizer ignoringCustomizer() {
-    return (web) -> web.ignoring().requestMatchers("/api/join");
   }
 }

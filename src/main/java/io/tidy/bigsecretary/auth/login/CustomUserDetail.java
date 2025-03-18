@@ -1,18 +1,20 @@
 package io.tidy.bigsecretary.auth.login;
 
-import io.tidy.bigsecretary.user.infra.User;
+import io.tidy.bigsecretary.user.domain.User;
 import java.util.Collection;
 import java.util.List;
+
+import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 public class CustomUserDetail implements UserDetails {
 
-  private final User user;
+  private final LoginUser user;
 
-  public CustomUserDetail(User user) {
-    this.user = user;
+  private CustomUserDetail(User user) {
+    this.user = new LoginUser(user.getId(), user.getPhone(), user.getPassword());
   }
 
   public Long getId() {
@@ -31,7 +33,7 @@ public class CustomUserDetail implements UserDetails {
 
   @Override
   public String getUsername() {
-    return this.user.getPassword();
+    return this.user.getPhone();
   }
 
   @Override
@@ -59,5 +61,22 @@ public class CustomUserDetail implements UserDetails {
     return "CustomUserDetail{" +
             "user=" + user.getId() +
             '}';
+  }
+
+  public static CustomUserDetail fromUserEntity(User user) {
+    return new CustomUserDetail(user);
+  }
+
+  @Getter
+  private static class LoginUser {
+    private Long id;
+    private String phone;
+    private String password;
+
+    public LoginUser(Long id, String phone, String password) {
+      this.id = id;
+      this.phone = phone;
+      this.password = password;
+    }
   }
 }

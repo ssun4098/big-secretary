@@ -25,8 +25,12 @@ public class Briefcase {
     private boolean deleted = false;
 
     @Builder
-    public Briefcase(String name, User user) {
+    private Briefcase(String name, User user) {
         this.name = name;
         this.user = user;
+    }
+
+    public void update(String name) {
+        this.name = name;
     }
 }
