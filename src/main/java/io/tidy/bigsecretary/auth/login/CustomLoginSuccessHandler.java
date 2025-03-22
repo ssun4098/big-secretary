@@ -32,7 +32,8 @@ public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler {
   }
 
   private Cookie createCookie(Long id) {
-    Cookie cookie = new Cookie(LOGIN_SUCCESS_COOKIE, jwtProvider.createToken(String.valueOf(id), expired));
+    Cookie cookie =
+        new Cookie(LOGIN_SUCCESS_COOKIE, jwtProvider.createToken(String.valueOf(id), expired));
     cookie.setSecure(true);
     cookie.setHttpOnly(true);
     cookie.setMaxAge(Math.toIntExact(expired));

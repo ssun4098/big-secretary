@@ -43,7 +43,7 @@ public class BriefcaseService {
   }
 
   public List<BriefcaseProfileResult> findBriefcaseList(
-          Pageable pageable, CustomUserDetail customUserDetail) {
+      Pageable pageable, CustomUserDetail customUserDetail) {
     User user = authenticatedUserContext.findLoginUser(customUserDetail);
     return briefcaseRepository.findByUser(user, pageable).stream()
         .map((briefcase -> new BriefcaseProfileResult(briefcase.getId(), briefcase.getName())))

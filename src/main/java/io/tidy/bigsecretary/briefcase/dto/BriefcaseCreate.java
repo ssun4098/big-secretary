@@ -1,5 +1,3 @@
 package io.tidy.bigsecretary.briefcase.dto;
 
-public record BriefcaseCreate(String name) {
-
-}
+public record BriefcaseCreate(String name) {}

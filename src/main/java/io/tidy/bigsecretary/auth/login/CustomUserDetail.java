@@ -3,7 +3,6 @@ package io.tidy.bigsecretary.auth.login;
 import io.tidy.bigsecretary.user.domain.User;
 import java.util.Collection;
 import java.util.List;
-
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -58,9 +57,7 @@ public class CustomUserDetail implements UserDetails {
 
   @Override
   public String toString() {
-    return "CustomUserDetail{" +
-            "user=" + user.getId() +
-            '}';
+    return "CustomUserDetail{" + "user=" + user.getId() + '}';
   }
 
   public static CustomUserDetail fromUserEntity(User user) {

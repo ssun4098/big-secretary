@@ -5,7 +5,6 @@ import io.tidy.bigsecretary.common.exception.CommonException;
 import io.tidy.bigsecretary.user.domain.User;
 import io.tidy.bigsecretary.user.infra.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,12 +21,13 @@ public class JoinService {
     if (userRepository.existsByPhone(joinParam.getPhone())) {
       throw new CommonException(JoinErrorCode.DUPLICATE_PHONE);
     }
-    User result = userRepository.save(
-        User.builder()
-            .name(joinParam.getName())
-            .phone(joinParam.getPhone())
-            .password(passwordEncoder.encode(joinParam.getPassword()))
-            .build());
+    User result =
+        userRepository.save(
+            User.builder()
+                .name(joinParam.getName())
+                .phone(joinParam.getPhone())
+                .password(passwordEncoder.encode(joinParam.getPassword()))
+                .build());
     return new JoinReturn(result.getId());
   }
 }

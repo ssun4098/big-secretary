@@ -6,6 +6,6 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class BriefcaseUpdateResult {
-    private Long id;
-    private String name;
+  private Long id;
+  private String name;
 }

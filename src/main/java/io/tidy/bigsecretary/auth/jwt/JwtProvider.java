@@ -6,7 +6,6 @@ import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
 import javax.crypto.SecretKey;
-
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -35,7 +34,7 @@ public class JwtProvider {
     String id = null;
     try {
       Jws<Claims> claims =
-              Jwts.parser().verifyWith((SecretKey) secretKey).build().parseSignedClaims(token);
+          Jwts.parser().verifyWith((SecretKey) secretKey).build().parseSignedClaims(token);
       id = claims.getPayload().get(USER_ID, String.class);
     } catch (JwtException e) {
       log.error("JWT Validation ERROR: {}", e.getMessage());

@@ -4,9 +4,9 @@ import lombok.Getter;
 
 @Getter
 public class JoinReturn {
-    private Long id;
+  private Long id;
 
-    public JoinReturn(Long id) {
-        this.id = id;
-    }
+  public JoinReturn(Long id) {
+    this.id = id;
+  }
 }

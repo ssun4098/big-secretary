@@ -6,5 +6,5 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public class BriefcaseUpdate {
-    private String name;
+  private String name;
 }

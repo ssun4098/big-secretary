@@ -15,32 +15,32 @@ import org.hibernate.annotations.SQLDelete;
 @Entity
 public class Briefcase {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    @Column(name = "name", length = 512)
-    private String name;
+  @Column(name = "name", length = 512)
+  private String name;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+  @ManyToOne
+  @JoinColumn(name = "user_id")
+  private User user;
 
-    @ColumnDefault("false")
-    @Column(name = "deleted")
-    private boolean deleted = false;
+  @ColumnDefault("false")
+  @Column(name = "deleted")
+  private boolean deleted = false;
 
-    @Builder
-    private Briefcase(String name, User user) {
-        this.name = name;
-        this.user = user;
-    }
+  @Builder
+  private Briefcase(String name, User user) {
+    this.name = name;
+    this.user = user;
+  }
 
-    public void update(String name) {
-        this.name = name;
-    }
+  public void update(String name) {
+    this.name = name;
+  }
 
-    public void delete() {
-        this.deleted = true;
-    }
+  public void delete() {
+    this.deleted = true;
+  }
 }
