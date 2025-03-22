@@ -7,9 +7,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
 
 @Getter
 @NoArgsConstructor
+@SQLRestriction("deleted = false")
 @SQLDelete(sql = "UPDATE BS_BRIEFCASE SET deleted = true WHERE id = ?")
 @Table(name = "BS_BRIEFCASE")
 @Entity

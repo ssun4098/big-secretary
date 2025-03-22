@@ -13,11 +13,11 @@ public class CustomUserDetail implements UserDetails {
   private final LoginUser user;
 
   private CustomUserDetail(User user) {
-    this.user = new LoginUser(user.getId(), user.getPhone(), user.getPassword());
+    this.user = new LoginUser(user.getId(), user.getPhone(), user.getPassword(), user.isLocked());
   }
 
   public Long getId() {
-    return user.getId();
+    return user.id();
   }
 
   @Override
@@ -27,12 +27,12 @@ public class CustomUserDetail implements UserDetails {
 
   @Override
   public String getPassword() {
-    return this.user.getPassword();
+    return this.user.password();
   }
 
   @Override
   public String getUsername() {
-    return this.user.getPhone();
+    return this.user.phone();
   }
 
   @Override
@@ -42,7 +42,7 @@ public class CustomUserDetail implements UserDetails {
 
   @Override
   public boolean isAccountNonLocked() {
-    return true;
+    return !user.locked();
   }
 
   @Override
@@ -52,28 +52,18 @@ public class CustomUserDetail implements UserDetails {
 
   @Override
   public boolean isEnabled() {
-    return true;
+    return !user.locked();
   }
 
   @Override
   public String toString() {
-    return "CustomUserDetail{" + "user=" + user.getId() + '}';
+    return "CustomUserDetail{" + "user=" + user.id() + '}';
   }
 
   public static CustomUserDetail fromUserEntity(User user) {
     return new CustomUserDetail(user);
   }
 
-  @Getter
-  private static class LoginUser {
-    private Long id;
-    private String phone;
-    private String password;
-
-    public LoginUser(Long id, String phone, String password) {
-      this.id = id;
-      this.phone = phone;
-      this.password = password;
-    }
+    private record LoginUser(Long id, String phone, String password, boolean locked) {
   }
 }

@@ -6,7 +6,12 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
 
+@SQLRestriction("deleted = false")
+@SQLDelete(sql = "UPDATE BS_USER SET deleted = true WHERE id = ?")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Entity
@@ -30,11 +35,31 @@ public class User {
   @Column(name = "password", nullable = false)
   private String password;
 
+  @ColumnDefault("false")
+  @Column(name = "deleted")
+  private boolean deleted = false;
+
+  @ColumnDefault("false")
+  @Column(name = "locked")
+  private boolean locked = false;
+
   @Builder
   public User(String name, String phone, String password) {
     this.name = name;
     this.phone = phone;
     this.password = password;
     this.uuid = UUID.randomUUID().toString();
+  }
+
+  public void delete() {
+    this.deleted = true;
+  }
+
+  public void lock() {
+    this.locked = true;
+  }
+
+  public void unlock() {
+    this.locked = false;
   }
 }
