@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor
+@Table(name = "BS_AGENDA")
 @Entity
 public class Agenda {
 
@@ -38,7 +39,7 @@ public class Agenda {
     private LocalDateTime alertTime;
 
     @ManyToOne
-    @Column(name = "briefcase_id", nullable = false)
+    @JoinColumn(name = "briefcase_id", nullable = false)
     private Briefcase briefcase;
 
     @ManyToOne

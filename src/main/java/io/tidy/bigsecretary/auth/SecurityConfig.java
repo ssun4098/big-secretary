@@ -37,7 +37,8 @@ public class SecurityConfig {
     return http
             .authorizeHttpRequests(
             (request) -> {
-              request.requestMatchers("/api/login").permitAll();
+              request.requestMatchers("/api/login", "/api/join").permitAll();
+              request.anyRequest().authenticated();
             })
         .csrf(AbstractHttpConfigurer::disable)
         .formLogin(AbstractHttpConfigurer::disable)

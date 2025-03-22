@@ -15,13 +15,8 @@ import org.springframework.stereotype.Component;
 public class AuthenticatedUserContext {
     private final UserRepository userRepository;
 
-    public User findLoginUser(Authentication authentication) {
-        if(!authentication.isAuthenticated() || authentication instanceof AnonymousAuthenticationToken) {
-            throw new CommonException(LoginErrorCode.REQUIRED_LOGIN);
-        }
-        CustomUserDetail userDetails = (CustomUserDetail) authentication.getPrincipal();
-
-        return userRepository.findById(userDetails.getId())
+    public User findLoginUser(CustomUserDetail customUserDetail) {
+        return userRepository.findById(customUserDetail.getId())
                 .orElseThrow(() -> new CommonException(UserErrorCode.NOT_FOUND));
     }
 

@@ -1,8 +1,5 @@
 package io.tidy.bigsecretary.briefcase.dto;
 
-import lombok.Getter;
+public record BriefcaseCreate(String name) {
 
-@Getter
-public class BriefcaseCreate {
-    private String name;
 }

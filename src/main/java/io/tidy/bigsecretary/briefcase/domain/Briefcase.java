@@ -5,9 +5,13 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.SQLDelete;
 
 @Getter
 @NoArgsConstructor
+@SQLDelete(sql = "UPDATE BS_BRIEFCASE SET deleted = true WHERE id = ?")
+@Table(name = "BS_BRIEFCASE")
 @Entity
 public class Briefcase {
 
@@ -22,6 +26,8 @@ public class Briefcase {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @ColumnDefault("false")
+    @Column(name = "deleted")
     private boolean deleted = false;
 
     @Builder
@@ -32,5 +38,9 @@ public class Briefcase {
 
     public void update(String name) {
         this.name = name;
+    }
+
+    public void delete() {
+        this.deleted = true;
     }
 }
