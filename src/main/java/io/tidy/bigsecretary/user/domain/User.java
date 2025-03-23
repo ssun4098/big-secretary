@@ -44,7 +44,7 @@ public class User {
   private boolean locked = false;
 
   @Enumerated(value = EnumType.STRING)
-  @Column(name = "role", length = 16, nullable = false, columnDefinition = "DEFAULT 'ROLE_USER'")
+  @Column(name = "role", length = 16, nullable = false)
   private ROLE role;
 
   @Builder
@@ -53,6 +53,7 @@ public class User {
     this.phone = phone;
     this.password = password;
     this.uuid = UUID.randomUUID().toString();
+    this.role = ROLE.ROLE_USER;
   }
 
   public void delete() {

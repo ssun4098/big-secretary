@@ -8,11 +8,13 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-@Table(name = "bs_briefcase_authority ")
+@Table(name = "bs_briefcase_authority")
 @Entity
 public class BriefcaseAuthority {
 
-  @Id private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
   @Column(name = "action")
   private Authority authority;
