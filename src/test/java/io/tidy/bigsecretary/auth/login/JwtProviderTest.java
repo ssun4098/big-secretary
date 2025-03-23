@@ -21,7 +21,7 @@ class JwtProviderTest {
     @Test
     void getUuidByToken() {
         String uuid = UUID.randomUUID().toString();
-        String token = jwtProvider.createToken(uuid, 500000L);
+        String token = jwtProvider.createToken(uuid, "ROLE_USER", 500000L);
         String id = jwtProvider.getUuidByToken(token);
         assertNotNull(id);
         assertEquals(uuid, id);

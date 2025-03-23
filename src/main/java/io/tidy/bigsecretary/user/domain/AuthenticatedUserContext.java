@@ -18,9 +18,9 @@ public class AuthenticatedUserContext {
         .orElseThrow(() -> new CommonException(UserErrorCode.NOT_FOUND));
   }
 
-  public User findById(Long id) {
+  public User findByUuid(String id) {
     return userRepository
-        .findById(id)
+        .findByUuid(id)
         .orElseThrow(() -> new CommonException(UserErrorCode.NOT_FOUND));
   }
 }

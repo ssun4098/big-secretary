@@ -15,15 +15,16 @@ import org.springframework.stereotype.Component;
 public class JwtProvider {
 
   private final Key secretKey;
-  private static String USER_ID = "user";
+  private static String ROLE = "role";
 
   public JwtProvider(@Value("${login.key}") String key) {
     this.secretKey = Keys.hmacShaKeyFor(key.getBytes(StandardCharsets.UTF_8));
   }
 
-  public String createToken(String uuid, Long expired) {
+  public String createToken(String uuid, String role, Long expired) {
     return Jwts.builder()
-        .claim(USER_ID, uuid)
+        .subject(uuid)
+        .claim(ROLE, role)
         .issuedAt(getIssuedDate())
         .expiration(createTokenExpiredDate(expired))
         .signWith(secretKey)
@@ -35,7 +36,7 @@ public class JwtProvider {
     try {
       Jws<Claims> claims =
           Jwts.parser().verifyWith((SecretKey) secretKey).build().parseSignedClaims(token);
-      id = claims.getPayload().get(USER_ID, String.class);
+      id = claims.getPayload().getSubject();
     } catch (JwtException e) {
       log.error("JWT Validation ERROR: {}", e.getMessage());
     }

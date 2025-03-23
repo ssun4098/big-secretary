@@ -1,9 +1,12 @@
 package io.tidy.bigsecretary.auth.login;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.tidy.bigsecretary.auth.jwt.JwtProvider;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,25 +21,31 @@ import org.springframework.stereotype.Component;
 public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler {
 
   private final JwtProvider jwtProvider;
-  public static final String LOGIN_SUCCESS_COOKIE = "BS_UR_TO";
+  private final ObjectMapper objectMapper;
 
   @Value("${login.expired}")
   private Long expired;
 
   @Override
   public void onAuthenticationSuccess(
-      HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
+      HttpServletRequest request, HttpServletResponse response, Authentication authentication)
+      throws IOException {
     CustomUserDetail customUserDetail = (CustomUserDetail) authentication.getPrincipal();
     SecurityContextHolder.getContext().setAuthentication(authentication);
-    response.addCookie(createCookie(customUserDetail.getId()));
+    LoginSuccessToken responseToken =
+            new LoginSuccessToken(
+                    jwtProvider.createToken(
+                            customUserDetail.getUuid(),
+                            String.valueOf(customUserDetail.getAuthorities().stream().findFirst().orElse(null)),
+                            expired));
+    response.setContentType("application/json");
+    response.setCharacterEncoding("UTF-8");
+    response.getWriter().write(objectMapper.writeValueAsString(responseToken));
   }
 
-  private Cookie createCookie(Long id) {
-    Cookie cookie =
-        new Cookie(LOGIN_SUCCESS_COOKIE, jwtProvider.createToken(String.valueOf(id), expired));
-    cookie.setSecure(true);
-    cookie.setHttpOnly(true);
-    cookie.setMaxAge(Math.toIntExact(expired));
-    return cookie;
+  @Getter
+  @AllArgsConstructor
+  private static class LoginSuccessToken {
+    private String accessToken;
   }
 }
