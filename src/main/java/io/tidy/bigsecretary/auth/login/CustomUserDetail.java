@@ -15,6 +15,7 @@ public class CustomUserDetail implements UserDetails {
     this.user =
         new LoginUser(
             user.getId(),
+            user.getUuid(),
             user.getPhone(),
             user.getPassword(),
             user.isLocked(),
@@ -23,6 +24,10 @@ public class CustomUserDetail implements UserDetails {
 
   public Long getId() {
     return user.id();
+  }
+
+  public String getUuid() {
+    return user.uuid();
   }
 
   @Override
@@ -69,5 +74,5 @@ public class CustomUserDetail implements UserDetails {
     return new CustomUserDetail(user);
   }
 
-  private record LoginUser(Long id, String phone, String password, boolean locked, String role) {}
+  private record LoginUser(Long id, String uuid, String phone, String password, boolean locked, String role) {}
 }
