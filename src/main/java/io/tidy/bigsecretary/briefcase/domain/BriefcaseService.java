@@ -4,6 +4,7 @@ import io.tidy.bigsecretary.auth.login.CustomUserDetail;
 import io.tidy.bigsecretary.briefcase.dto.*;
 import io.tidy.bigsecretary.briefcase.exception.BriefcaseErrorCode;
 import io.tidy.bigsecretary.briefcase.repository.BriefcaseRepository;
+import io.tidy.bigsecretary.briefcase.repository.BriefcaseAuthorityRepository;
 import io.tidy.bigsecretary.common.exception.CommonException;
 import io.tidy.bigsecretary.user.domain.AuthenticatedUserContext;
 import io.tidy.bigsecretary.user.domain.User;
@@ -17,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class BriefcaseService {
   private final BriefcaseRepository briefcaseRepository;
+  private final BriefcaseAuthorityRepository briefcaseAuthorityRepository;
   private final AuthenticatedUserContext authenticatedUserContext;
 
   @Transactional
@@ -24,6 +26,7 @@ public class BriefcaseService {
     User user = authenticatedUserContext.findLoginUser(customUserDetail);
     Briefcase result =
         briefcaseRepository.save(Briefcase.builder().name(create.name()).user(user).build());
+    briefcaseAuthorityRepository.save(BriefcaseAuthority.builder().briefcase(result).user(user).build());
     return new BriefcaseCreateResult(result.getId(), result.getName());
   }
 
@@ -35,9 +38,9 @@ public class BriefcaseService {
         briefcaseRepository
             .findById(id)
             .orElseThrow(() -> new CommonException(BriefcaseErrorCode.NOT_FOUND));
-    if (!briefcase.getUser().equals(user)) {
-      throw new CommonException(BriefcaseErrorCode.FORBIDDEN);
-    }
+
+    validateWriteAuthority(briefcase, user);
+
     briefcase.update(update.getName());
     return new BriefcaseUpdateResult(briefcase.getId(), briefcase.getName());
   }
@@ -57,9 +60,17 @@ public class BriefcaseService {
         briefcaseRepository
             .findById(id)
             .orElseThrow(() -> new CommonException(BriefcaseErrorCode.NOT_FOUND));
-    if (!briefcase.getUser().equals(user)) {
+    validateWriteAuthority(briefcase, user);
+    briefcase.delete();
+  }
+
+  private void validateWriteAuthority(Briefcase briefcase, User user) {
+    BriefcaseAuthority briefcaseAuthority =
+        briefcaseAuthorityRepository
+            .findByUserAndBriefcase(user, briefcase)
+            .orElseThrow(() -> new CommonException(BriefcaseErrorCode.FORBIDDEN));
+    if (!briefcaseAuthority.canWrite()) {
       throw new CommonException(BriefcaseErrorCode.FORBIDDEN);
     }
-    briefcase.delete();
   }
 }

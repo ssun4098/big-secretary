@@ -35,7 +35,7 @@ public class JwtFilter extends OncePerRequestFilter {
       String id = jwtProvider.getUuidByToken(cookie.getValue());
       if (Objects.nonNull(id)) {
         UserDetails customUserDetail =
-            CustomUserDetail.fromUserEntity(authenticatedUserContext.findById(Long.parseLong(id)));
+            CustomUserDetail.of(authenticatedUserContext.findById(Long.parseLong(id)));
         SecurityContextHolder.getContext()
             .setAuthentication(
                 new UsernamePasswordAuthenticationToken(

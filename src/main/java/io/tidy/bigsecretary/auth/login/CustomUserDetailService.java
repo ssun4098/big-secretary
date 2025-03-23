@@ -22,6 +22,6 @@ public class CustomUserDetailService implements UserDetailsService {
         userRepository
             .findByPhone(username)
             .orElseThrow(() -> new CommonException(UserErrorCode.NOT_FOUND));
-    return CustomUserDetail.fromUserEntity(user);
+    return CustomUserDetail.of(user);
   }
 }

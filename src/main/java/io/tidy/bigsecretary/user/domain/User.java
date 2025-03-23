@@ -43,6 +43,10 @@ public class User {
   @Column(name = "locked")
   private boolean locked = false;
 
+  @Enumerated(value = EnumType.STRING)
+  @Column(name = "role", length = 16, nullable = false, columnDefinition = "DEFAULT 'ROLE_USER'")
+  private ROLE role;
+
   @Builder
   public User(String name, String phone, String password) {
     this.name = name;
